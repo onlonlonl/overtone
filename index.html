@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>Overtone</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23f0f0f0'/%3E%3Crect x='1' y='3' width='30' height='26' fill='%23222'/%3E%3Crect x='3' y='5' width='26' height='22' fill='%23fafafa'/%3E%3Crect x='5' y='5' width='3' height='13' fill='%23222'/%3E%3Crect x='9' y='5' width='3' height='13' fill='%23222'/%3E%3Crect x='17' y='5' width='3' height='13' fill='%23222'/%3E%3Crect x='21' y='5' width='3' height='13' fill='%23222'/%3E%3Crect x='25' y='5' width='3' height='13' fill='%23222'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAABmJLR0QA/wD/AP+gvaeTAAACNElEQVR4nO3dsW3CUBRAUYgYxpUL9t/AEoUrj+ER0kaEGwKE4CjndLbw05N19SVo2K/ruoNL3l69ANslDpI4SOIgiYMkDpI4SOIgiYMkDpI4SOIgiYMkDpI4SOIgHT7fOh6Pv78HL3c6nc7uODlI4iCJgyQOkjhI4iCJgyQOkjhI4iBd+Pn8qmVZvv7AMAyPz7x1yNWtdrvdPM8fL8dxvPrI42ts5G1cnTBN09kdJwdJHCRxkMRBEgdJHCRxkMRBEgdJHCRxkMRBEgdJHCRxkMRBEgdJHCRxkMRBEgdJHCRxkMRBEgdJHCRxkMRBEgdJHCRxkMRBEgdJHCRxkMRBEgdJHCRxkMRBEgdJHCRxkMRBEgdJHCRxkMRBEgdJHCRxkMRBEgdJHCRxkMRBEgdJHCRxkMRBEgdJHCRxkMRBEgdJHCRxkMRBEgdJHCRxkMRBOjxj6LIsZ3fmef54OY7jrUPOJnxzyOMeX+Pvvg0nB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcpHv+xmsYhh/fgw1ycpDEQRIHSRwkcZDEQRIHSRwkcZDEQdqv63rrM9M0PWMVtsbJQRIHSRwkcZDEQbrn2wr/hJODJA6SOEjiIImDJA6SOEjiIImDJA7SO820QsD+fDrZAAAAAElFTkSuQmCC">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DotGothic16&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+.ot{min-height:100vh;background:#f0f0f0;color:#222;font-family:'DotGothic16',monospace;font-size:13px;position:relative}
+.ot::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle,#d8d8d8 1px,transparent 1px);background-size:16px 16px;opacity:.5;pointer-events:none;z-index:0}
+.ow{position:relative;z-index:1;max-width:640px;margin:0 auto;padding:16px 10px}
+.oh{text-align:center;padding:20px 0 12px;border-bottom:2px dashed #ccc;margin-bottom:12px}
+.oh h1{font-size:24px;font-weight:800;letter-spacing:6px;text-transform:uppercase;color:#111;text-shadow:2px 2px 0 #ddd;cursor:pointer}
+.oh .su{font-size:10px;letter-spacing:4px;color:#999;margin-top:2px}
+.ts{display:flex;justify-content:center;gap:8px;margin-bottom:14px}
+.tb{padding:8px 18px;border:2px solid #222;background:#fafafa;color:#666;cursor:pointer;font-size:11px;font-family:inherit;letter-spacing:2px;text-transform:uppercase;box-shadow:2px 2px 0 #ccc}
+.tb:hover{transform:translateY(-1px)}.tb.on{background:#222;color:#f0f0f0;box-shadow:3px 3px 0 #999}
+.ct{display:flex;gap:8px;justify-content:center;align-items:center;margin-bottom:10px}
+.bt{padding:7px 16px;border:2px solid #222;background:#fafafa;color:#444;cursor:pointer;font-size:11px;font-family:inherit;letter-spacing:2px;text-transform:uppercase;box-shadow:2px 2px 0 #ccc}
+.bt:hover:not(:disabled){transform:translateY(-1px)}.bt:disabled{opacity:.4;cursor:not-allowed}.bt.dk{background:#222;color:#f0f0f0;box-shadow:3px 3px 0 #999}
+.ip{width:100%;padding:8px 10px;border:2px solid #222;background:#fafafa;font-family:inherit;font-size:12px;color:#222;outline:none;box-sizing:border-box}
+.ip:focus{background:#fff}.ip::placeholder{color:#bbb}
+.rdot{width:7px;height:7px;background:#222;display:inline-block;animation:pu 1s ease infinite;vertical-align:middle;margin-right:4px}
+@keyframes pu{0%,100%{opacity:1}50%{opacity:.2}}
+.wf{display:flex;justify-content:center;gap:1px;padding:8px 0 4px;height:40px;align-items:flex-end}
+.wb{width:4px;min-height:2px;background:#ddd;transition:height .1s ease-out,background .1s}.wb.on{background:#222}
+.pw{border:2px solid #222;background:#fafafa;margin:12px 0;box-shadow:3px 3px 0 #ccc;overflow-x:auto}
+.pl{font-size:9px;letter-spacing:2px;color:#999;text-transform:uppercase;padding:6px 8px;border-bottom:1px dashed #ddd}
+.prr{display:flex;align-items:center;border-bottom:1px solid #eee}
+.pn{width:36px;font-size:8px;color:#999;text-align:right;padding-right:4px;flex-shrink:0}
+.ptk{flex:1;position:relative;height:12px}.pbl{position:absolute;top:1px;height:10px;background:#222;min-width:2px}
+.rc{border:2px solid #222;background:#fafafa;margin:12px 0 0;box-shadow:3px 3px 0 #ccc;padding:18px 16px 16px}
+.rtt{text-align:center;font-size:14px;letter-spacing:4px;text-transform:uppercase;margin-bottom:2px}
+.rts{text-align:center;font-size:10px;color:#999;letter-spacing:2px;margin-bottom:12px}
+.rdd{border:none;border-top:2px dashed #ddd;margin:10px 0}
+.rrw{display:flex;justify-content:space-between;padding:3px 0;font-size:12px}
+.rrw .l{color:#999;letter-spacing:1px}.rrw .d{flex:1;border-bottom:1px dotted #ddd;margin:0 6px 4px}.rrw .v{font-weight:700;color:#222}
+.rte{text-align:center;font-size:8px;color:#ccc;letter-spacing:1px;margin-top:-1px}
+.hc{border:2px solid #ddd;background:#fafafa;padding:12px;margin-bottom:8px;cursor:pointer;box-shadow:2px 2px 0 #e8e8e8}
+.hc:hover{border-color:#222;box-shadow:3px 3px 0 #ccc}
+.lxr{margin-top:8px;padding:8px;border:2px dashed #ccc;font-size:11px;color:#555;background:#f5f5f5}
+.lxl{font-size:9px;letter-spacing:2px;color:#999;margin-bottom:4px;text-transform:uppercase}
+.em{text-align:center;color:#bbb;padding:32px 0;font-size:12px;letter-spacing:1px}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+<script>
+const {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useMemo
+} = React;
+
+/* ── API helper ── */
+function getAPI() {
+  const hash = window.location.hash.slice(1);
+  if (!hash) return null;
+  return hash.replace(/\/$/, '') + '/functions/v1/overtone-api';
+}
+async function api(path, opts = {}) {
+  const base = getAPI();
+  if (!base) return null;
+  try {
+    const r = await fetch(base + (path || ''), {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      ...opts
+    });
+    if (!r.ok) return null;
+    return await r.json();
+  } catch (e) {
+    return null;
+  }
+}
+
+/* ── Music ── */
+const NT = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+const OCTS = [3, 4, 5];
+const ALL = OCTS.flatMap(o => NT.map(n => ({
+  n,
+  full: n + o,
+  oct: o,
+  bk: n.includes('#')
+})));
+const WK = ALL.filter(k => !k.bk);
+const BK = ALL.filter(k => k.bk);
+const WW = 100 / WK.length;
+const KB = {
+  a: 'C3',
+  w: 'C#3',
+  s: 'D3',
+  e: 'D#3',
+  d: 'E3',
+  f: 'F3',
+  t: 'F#3',
+  g: 'G3',
+  y: 'G#3',
+  h: 'A3',
+  u: 'A#3',
+  j: 'B3',
+  k: 'C4',
+  o: 'C#4',
+  l: 'D4',
+  p: 'D#4',
+  z: 'F4',
+  x: 'G4',
+  c: 'A4',
+  v: 'B4',
+  b: 'C5',
+  n: 'D5',
+  m: 'E5'
+};
+const mid = note => {
+  const m = note.match(/^([A-G]#?)(\d+)$/);
+  return m ? (parseInt(m[2]) + 1) * 12 + NT.indexOf(m[1]) : 0;
+};
+const bkL = k => {
+  const mp = {
+    'C#': 'C',
+    'D#': 'D',
+    'F#': 'F',
+    'G#': 'G',
+    'A#': 'A'
+  };
+  const i = WK.findIndex(w => w.n === mp[k.n] && w.oct === k.oct);
+  return i < 0 ? -100 : (i + .62) * WW;
+};
+const fmtT = ms => {
+  const s = Math.floor(ms / 1000);
+  return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+};
+const kbl = f => {
+  const e = Object.entries(KB).find(function (p) {
+    return p[1] === f;
+  });
+  return e ? e[0].toUpperCase() : '';
+};
+const dynL = v => v < .25 ? 'pp' : v < .4 ? 'p' : v < .55 ? 'mp' : v < .7 ? 'mf' : v < .85 ? 'f' : 'ff';
+function calcStats(ev) {
+  if (!ev.length) return null;
+  const last = ev[ev.length - 1],
+    dur = last.start + last.duration;
+  const ms = ev.map(function (e) {
+      return mid(e.note);
+    }),
+    mn = Math.min.apply(null, ms),
+    mx = Math.max.apply(null, ms);
+  const lo = ev.find(function (e) {
+      return mid(e.note) === mn;
+    }),
+    hi = ev.find(function (e) {
+      return mid(e.note) === mx;
+    });
+  const cnt = {};
+  ev.forEach(function (e) {
+    cnt[e.note] = (cnt[e.note] || 0) + 1;
+  });
+  const fav = Object.entries(cnt).sort(function (a, b) {
+    return b[1] - a[1];
+  })[0];
+  const av = ev.reduce(function (s, e) {
+    return s + e.velocity;
+  }, 0) / ev.length;
+  return {
+    n: ev.length,
+    dur: dur,
+    lo: lo ? lo.note : '?',
+    hi: hi ? hi.note : '?',
+    fav: fav[0],
+    fn: fav[1],
+    dyn: dynL(av),
+    tempo: Math.round(ev.length / (dur / 60000)),
+    uniq: Object.keys(cnt).length
+  };
+}
+
+/* ── Piano SVG (inline for main page) ── */
+function PianoArt() {
+  return React.createElement('svg', {
+    xmlns: 'http://www.w3.org/2000/svg',
+    viewBox: '0 0 120 96',
+    shapeRendering: 'crispEdges',
+    style: {
+      width: 180,
+      height: 'auto',
+      display: 'block',
+      margin: '0 auto'
+    }
+  }, React.createElement('rect', {
+    width: 120,
+    height: 96,
+    fill: '#f0f0f0'
+  }), React.createElement('rect', {
+    x: 4,
+    y: 8,
+    width: 112,
+    height: 80,
+    fill: '#222'
+  }), React.createElement('rect', {
+    x: 8,
+    y: 12,
+    width: 104,
+    height: 72,
+    fill: '#333'
+  }), React.createElement('rect', {
+    x: 8,
+    y: 12,
+    width: 104,
+    height: 16,
+    fill: '#2a2a2a'
+  }), React.createElement('rect', {
+    x: 12,
+    y: 14,
+    width: 96,
+    height: 12,
+    fill: '#1a1a1a'
+  }), React.createElement('rect', {
+    x: 36,
+    y: 16,
+    width: 2,
+    height: 6,
+    fill: '#555'
+  }), React.createElement('rect', {
+    x: 34,
+    y: 21,
+    width: 4,
+    height: 3,
+    fill: '#555'
+  }), React.createElement('rect', {
+    x: 58,
+    y: 15,
+    width: 2,
+    height: 7,
+    fill: '#555'
+  }), React.createElement('rect', {
+    x: 56,
+    y: 21,
+    width: 4,
+    height: 3,
+    fill: '#555'
+  }), React.createElement('rect', {
+    x: 36,
+    y: 15,
+    width: 24,
+    height: 2,
+    fill: '#555'
+  }), React.createElement('rect', {
+    x: 80,
+    y: 17,
+    width: 2,
+    height: 5,
+    fill: '#555'
+  }), React.createElement('rect', {
+    x: 78,
+    y: 21,
+    width: 4,
+    height: 3,
+    fill: '#555'
+  }), React.createElement('rect', {
+    x: 10,
+    y: 30,
+    width: 100,
+    height: 50,
+    fill: '#fafafa'
+  }), [20, 30, 40, 50, 60, 70, 80, 90, 100].map(function (x) {
+    return React.createElement('rect', {
+      key: x,
+      x: x,
+      y: 30,
+      width: 1,
+      height: 50,
+      fill: '#ddd'
+    });
+  }), React.createElement('rect', {
+    x: 10,
+    y: 74,
+    width: 100,
+    height: 6,
+    fill: '#e8e8e8'
+  }), [17, 28].map(function (x) {
+    return React.createElement('rect', {
+      key: 'b1' + x,
+      x: x,
+      y: 30,
+      width: 7,
+      height: 30,
+      fill: '#222'
+    });
+  }), [47, 57, 67].map(function (x) {
+    return React.createElement('rect', {
+      key: 'b2' + x,
+      x: x,
+      y: 30,
+      width: 7,
+      height: 30,
+      fill: '#222'
+    });
+  }), [87, 97].map(function (x) {
+    return React.createElement('rect', {
+      key: 'b3' + x,
+      x: x,
+      y: 30,
+      width: 7,
+      height: 30,
+      fill: '#222'
+    });
+  }), React.createElement('rect', {
+    x: 8,
+    y: 84,
+    width: 108,
+    height: 4,
+    fill: '#111'
+  }), React.createElement('rect', {
+    x: 116,
+    y: 12,
+    width: 4,
+    height: 76,
+    fill: '#111'
+  }));
+}
+
+/* ═══════════════════════════════════════
+   MAIN APP
+   ═══════════════════════════════════════ */
+function App() {
+  const [view, setView] = useState(function () {
+    return getAPI() ? 'home' : 'setup';
+  });
+  const [mode, setMode] = useState('idle');
+  const [act, setAct] = useState(new Set());
+  const [rec, setRec] = useState([]);
+  const [toneReady, setToneReady] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [title, setTitle] = useState('');
+  const [msg, setMsg] = useState('');
+  const [hist, setHist] = useState([]);
+  const [pb, setPb] = useState(false);
+  const [expH, setExpH] = useState(null);
+  const [setupUrl, setSetupUrl] = useState('');
+  const [setupErr, setSetupErr] = useState('');
+  const [connecting, setConnecting] = useState(false);
+  const synRef = useRef(null);
+  const noteStartRef = useRef({});
+  const recRef = useRef([]);
+  const modeRef = useRef('idle');
+  const recStartRef = useRef(0);
+  const pbTimers = useRef([]);
+  const debounceRef = useRef({});
+  const wfHeights = useRef({});
+
+  /* ── Setup ── */
+  var doSetup = async function () {
+    if (!setupUrl.trim()) return;
+    var url = setupUrl.trim().replace(/\/$/, '');
+    if (!url.startsWith('https://')) url = 'https://' + url;
+    setConnecting(true);
+    setSetupErr('');
+    try {
+      var r = await fetch(url + '/functions/v1/overtone-api/performances', {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      if (r.ok) {
+        window.location.hash = url;
+        setView('home');
+      } else {
+        setSetupErr('Could not connect. Check your URL and make sure the Edge Function is deployed.');
+      }
+    } catch (e) {
+      setSetupErr('Connection failed. Check your Supabase URL.');
+    }
+    setConnecting(false);
+  };
+
+  /* ── Audio ── */
+  var initTone = useCallback(async function () {
+    if (toneReady) return;
+    if (synRef.current) return;
+    await Tone.start();
+    synRef.current = new Tone.PolySynth(Tone.Synth, {
+      maxPolyphony: 16,
+      options: {
+        oscillator: {
+          type: 'triangle8'
+        },
+        envelope: {
+          attack: .005,
+          decay: .3,
+          sustain: .4,
+          release: 1.2
+        },
+        volume: -8
+      }
+    }).toDestination();
+    var rv = new Tone.Reverb({
+      decay: 2.5,
+      wet: .3
+    }).toDestination();
+    synRef.current.connect(rv);
+    setToneReady(true);
+  }, [toneReady]);
+  var noteOn = useCallback(function (note, velocity) {
+    if (!synRef.current) return;
+    var now = Date.now();
+    if (debounceRef.current[note] && now - debounceRef.current[note] < 100) return;
+    debounceRef.current[note] = now;
+    synRef.current.triggerAttack(note, Tone.now(), velocity);
+    setAct(function (p) {
+      var s = new Set(p);
+      s.add(note);
+      return s;
+    });
+    noteStartRef.current[note] = {
+      time: Date.now(),
+      velocity: velocity
+    };
+  }, []);
+  var noteOff = useCallback(function (note) {
+    if (!synRef.current) return;
+    try {
+      synRef.current.triggerRelease(note, Tone.now());
+    } catch (e) {}
+    setAct(function (p) {
+      var s = new Set(p);
+      s.delete(note);
+      return s;
+    });
+    var info = noteStartRef.current[note];
+    if (info && modeRef.current === 'recording') {
+      var ev = {
+        note: note,
+        start: info.time - recStartRef.current,
+        duration: Math.max(Date.now() - info.time, 50),
+        velocity: +info.velocity.toFixed(2)
+      };
+      recRef.current = recRef.current.concat([ev]);
+      setRec(recRef.current.slice());
+    }
+    delete noteStartRef.current[note];
+  }, []);
+  useEffect(function () {
+    var up = function () {
+      Object.keys(noteStartRef.current).forEach(function (n) {
+        noteOff(n);
+      });
+    };
+    window.addEventListener('mouseup', up);
+    window.addEventListener('touchend', up);
+    return function () {
+      window.removeEventListener('mouseup', up);
+      window.removeEventListener('touchend', up);
+    };
+  }, [noteOff]);
+  useEffect(function () {
+    var held = {};
+    var dn = function (e) {
+      if (e.repeat || e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      var note = KB[e.key.toLowerCase()] || KB[e.key];
+      if (note && !held[note]) {
+        held[note] = true;
+        initTone().then(function () {
+          noteOn(note, .5 + Math.random() * .3);
+        });
+      }
+    };
+    var up = function (e) {
+      var note = KB[e.key.toLowerCase()] || KB[e.key];
+      if (note) {
+        delete held[note];
+        noteOff(note);
+      }
+    };
+    window.addEventListener('keydown', dn);
+    window.addEventListener('keyup', up);
+    return function () {
+      window.removeEventListener('keydown', dn);
+      window.removeEventListener('keyup', up);
+    };
+  }, [initTone, noteOn, noteOff]);
+  var startRec = async function () {
+    await initTone();
+    recRef.current = [];
+    setRec([]);
+    recStartRef.current = Date.now();
+    modeRef.current = 'recording';
+    setMode('recording');
+    setSaved(false);
+  };
+  var stopRec = function () {
+    Object.keys(noteStartRef.current).forEach(function (n) {
+      noteOff(n);
+    });
+    modeRef.current = 'review';
+    setMode('review');
+  };
+  var discard = function () {
+    recRef.current = [];
+    setRec([]);
+    modeRef.current = 'idle';
+    setMode('idle');
+    setTitle('');
+    setMsg('');
+  };
+  var doPlay = useCallback(function (notes) {
+    if (!synRef.current || !notes.length) return;
+    setPb(true);
+    pbTimers.current.forEach(clearTimeout);
+    pbTimers.current = [];
+    notes.forEach(function (ev) {
+      pbTimers.current.push(setTimeout(function () {
+        synRef.current.triggerAttack(ev.note, Tone.now(), ev.velocity);
+        setAct(function (p) {
+          var s = new Set(p);
+          s.add(ev.note);
+          return s;
+        });
+      }, ev.start));
+      pbTimers.current.push(setTimeout(function () {
+        try {
+          synRef.current.triggerRelease(ev.note, Tone.now());
+        } catch (e) {}
+        setAct(function (p) {
+          var s = new Set(p);
+          s.delete(ev.note);
+          return s;
+        });
+      }, ev.start + ev.duration));
+    });
+    var last = notes[notes.length - 1];
+    pbTimers.current.push(setTimeout(function () {
+      setPb(false);
+      setAct(new Set());
+    }, last.start + last.duration + 300));
+  }, []);
+  var stopPb = function () {
+    pbTimers.current.forEach(clearTimeout);
+    pbTimers.current = [];
+    setPb(false);
+    if (synRef.current) synRef.current.releaseAll();
+    setAct(new Set());
+  };
+  var save = async function () {
+    if (!rec.length) return;
+    setSaving(true);
+    var last = rec[rec.length - 1];
+    var res = await api('/performances', {
+      method: 'POST',
+      body: JSON.stringify({
+        title: title || 'Untitled',
+        message: msg || null,
+        notes: rec,
+        duration_ms: Math.round(last.start + last.duration),
+        note_count: rec.length,
+        performer: 'user'
+      })
+    });
+    if (res) {
+      setSaved(true);
+      setTimeout(function () {
+        discard();
+        setSaved(false);
+      }, 1800);
+    } else alert('Save failed.');
+    setSaving(false);
+  };
+  var loadH = async function () {
+    var d = await api('/performances');
+    setHist(d || []);
+  };
+  useEffect(function () {
+    if (view === 'history') loadH();
+  }, [view]);
+  var stats = useMemo(function () {
+    return calcStats(rec);
+  }, [rec]);
+  var gwf = function (full, on) {
+    if (on && !wfHeights.current[full]) wfHeights.current[full] = 10 + Math.random() * 22;
+    if (!on) delete wfHeights.current[full];
+    return on ? wfHeights.current[full] : 2;
+  };
+
+  /* ════════════ RENDER ════════════ */
+
+  /* ── Setup View ── */
+  if (view === 'setup') {
+    return React.createElement('div', {
+      className: 'ot'
+    }, React.createElement('div', {
+      className: 'ow'
+    }, React.createElement('div', {
+      style: {
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: '20px'
+      }
+    }, React.createElement(PianoArt), React.createElement('h1', {
+      style: {
+        fontSize: 24,
+        fontWeight: 800,
+        letterSpacing: 6,
+        marginTop: 20,
+        textShadow: '2px 2px 0 #ddd'
+      }
+    }, 'OVERTONE'), React.createElement('div', {
+      style: {
+        fontSize: 10,
+        letterSpacing: 4,
+        color: '#999',
+        marginBottom: 24
+      }
+    }, '\u6cdb\u97f3'), React.createElement('div', {
+      style: {
+        width: '100%',
+        maxWidth: 360
+      }
+    }, React.createElement('div', {
+      style: {
+        fontSize: 10,
+        letterSpacing: 2,
+        color: '#999',
+        marginBottom: 8,
+        textTransform: 'uppercase'
+      }
+    }, 'Enter your Supabase URL'), React.createElement('input', {
+      className: 'ip',
+      value: setupUrl,
+      onChange: function (e) {
+        setSetupUrl(e.target.value);
+      },
+      placeholder: 'https://xxx.supabase.co',
+      onKeyDown: function (e) {
+        if (e.key === 'Enter') doSetup();
+      }
+    }), setupErr && React.createElement('div', {
+      style: {
+        fontSize: 10,
+        color: '#999',
+        marginTop: 6
+      }
+    }, setupErr), React.createElement('button', {
+      className: 'bt dk',
+      style: {
+        width: '100%',
+        marginTop: 10
+      },
+      onClick: doSetup,
+      disabled: connecting
+    }, connecting ? '...' : 'CONNECT')))));
+  }
+
+  /* ── Home View ── */
+  if (view === 'home') {
+    return React.createElement('div', {
+      className: 'ot'
+    }, React.createElement('div', {
+      className: 'ow'
+    }, React.createElement('div', {
+      style: {
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center'
+      }
+    }, React.createElement(PianoArt), React.createElement('h1', {
+      style: {
+        fontSize: 24,
+        fontWeight: 800,
+        letterSpacing: 6,
+        marginTop: 20,
+        textShadow: '2px 2px 0 #ddd'
+      }
+    }, 'OVERTONE'), React.createElement('div', {
+      style: {
+        fontSize: 10,
+        letterSpacing: 4,
+        color: '#999',
+        marginBottom: 32
+      }
+    }, '\u6cdb\u97f3'), React.createElement('div', {
+      style: {
+        display: 'flex',
+        gap: 8
+      }
+    }, React.createElement('button', {
+      className: 'bt dk',
+      onClick: function () {
+        setView('piano');
+        setMode('idle');
+      }
+    }, '\ud83c\udfb9 PLAY'), React.createElement('button', {
+      className: 'bt',
+      onClick: function () {
+        setView('history');
+      }
+    }, '\ud83d\udcdc HISTORY')), React.createElement('div', {
+      style: {
+        marginTop: 20,
+        fontSize: 9,
+        color: '#ccc',
+        letterSpacing: 2,
+        cursor: 'pointer'
+      },
+      onClick: function () {
+        window.location.hash = '';
+        setView('setup');
+      }
+    }, '\u2699 RECONNECT'))));
+  }
+
+  /* ── Piano / History Views ── */
+  return React.createElement('div', {
+    className: 'ot'
+  }, React.createElement('div', {
+    className: 'ow'
+  }, /* Header */
+  React.createElement('div', {
+    className: 'oh'
+  }, React.createElement('h1', {
+    onClick: function () {
+      setView('home');
+      if (pb) stopPb();
+    },
+    style: {
+      cursor: 'pointer'
+    }
+  }, 'OVERTONE'), React.createElement('div', {
+    className: 'su'
+  }, '\u6cdb\u97f3')), /* Tabs */
+  React.createElement('div', {
+    className: 'ts'
+  }, [['piano', '\ud83c\udfb9 Play'], ['history', '\ud83d\udcdc History']].map(function (item) {
+    return React.createElement('button', {
+      key: item[0],
+      className: 'tb' + (view === item[0] ? ' on' : ''),
+      onClick: function () {
+        setView(item[0]);
+        if (pb) stopPb();
+      }
+    }, item[1]);
+  })), /* Piano View */
+  view === 'piano' && React.createElement('div', null, /* Controls */
+  React.createElement('div', {
+    className: 'ct'
+  }, mode === 'idle' && React.createElement('button', {
+    className: 'bt dk',
+    onClick: startRec
+  }, '\u23fa REC'), mode === 'recording' && React.createElement('div', {
+    style: {
+      display: 'flex',
+      gap: 8,
+      alignItems: 'center'
+    }
+  }, React.createElement('button', {
+    className: 'bt dk',
+    onClick: stopRec
+  }, '\u23f9 STOP'), React.createElement('span', {
+    style: {
+      fontSize: 11
+    }
+  }, React.createElement('span', {
+    className: 'rdot'
+  }), ' ' + rec.length + ' notes')), mode === 'review' && React.createElement('button', {
+    className: 'bt',
+    onClick: discard
+  }, '\u2715 DISCARD')), /* Piano keyboard */
+  React.createElement('div', {
+    style: {
+      position: 'relative',
+      width: '100%',
+      height: 160,
+      userSelect: 'none'
+    }
+  }, WK.map(function (k, i) {
+    var a = act.has(k.full);
+    return React.createElement('div', {
+      key: k.full,
+      onMouseDown: function (e) {
+        e.preventDefault();
+        initTone().then(function () {
+          noteOn(k.full, .5 + Math.random() * .4);
+        });
+      },
+      onMouseUp: function () {
+        noteOff(k.full);
+      },
+      onMouseLeave: function () {
+        if (act.has(k.full)) noteOff(k.full);
+      },
+      onTouchStart: function (e) {
+        e.preventDefault();
+        initTone().then(function () {
+          noteOn(k.full, .5 + Math.random() * .4);
+        });
+      },
+      onTouchEnd: function (e) {
+        e.preventDefault();
+        noteOff(k.full);
+      },
+      style: {
+        position: 'absolute',
+        left: i * WW + '%',
+        width: WW + '%',
+        height: '100%',
+        background: a ? '#ddd' : '#fafafa',
+        border: '2px solid #222',
+        borderTop: 'none',
+        boxSizing: 'border-box',
+        cursor: 'pointer',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        paddingBottom: 6,
+        transition: 'background .06s',
+        boxShadow: a ? 'inset 0 -4px 0 #bbb' : 'inset 0 -6px 0 #e8e8e8'
+      }
+    }, React.createElement('span', {
+      style: {
+        fontSize: 8,
+        color: '#bbb',
+        pointerEvents: 'none'
+      }
+    }, kbl(k.full)));
+  }), BK.map(function (k) {
+    var a = act.has(k.full);
+    return React.createElement('div', {
+      key: k.full,
+      onMouseDown: function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        initTone().then(function () {
+          noteOn(k.full, .5 + Math.random() * .4);
+        });
+      },
+      onMouseUp: function (e) {
+        e.stopPropagation();
+        noteOff(k.full);
+      },
+      onMouseLeave: function () {
+        if (act.has(k.full)) noteOff(k.full);
+      },
+      onTouchStart: function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        initTone().then(function () {
+          noteOn(k.full, .5 + Math.random() * .4);
+        });
+      },
+      onTouchEnd: function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        noteOff(k.full);
+      },
+      style: {
+        position: 'absolute',
+        left: bkL(k) + '%',
+        width: WW * .58 + '%',
+        height: '60%',
+        background: a ? '#555' : '#222',
+        border: '2px solid #111',
+        boxSizing: 'border-box',
+        cursor: 'pointer',
+        zIndex: 2,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        paddingBottom: 4,
+        transition: 'background .06s',
+        boxShadow: a ? 'inset 0 -2px 0 #333' : 'inset 0 -4px 0 #444'
+      }
+    }, React.createElement('span', {
+      style: {
+        fontSize: 7,
+        color: '#666',
+        pointerEvents: 'none'
+      }
+    }, kbl(k.full)));
+  })), /* Waveform */
+  React.createElement('div', {
+    className: 'wf'
+  }, ALL.map(function (k) {
+    var on = act.has(k.full);
+    return React.createElement('div', {
+      key: k.full,
+      className: 'wb' + (on ? ' on' : ''),
+      style: {
+        height: gwf(k.full, on)
+      }
+    });
+  })), !toneReady && React.createElement('div', {
+    className: 'em',
+    style: {
+      padding: 8,
+      fontSize: 10
+    }
+  }, 'tap a key to start'), /* Review */
+  mode === 'review' && rec.length > 0 && React.createElement('div', null, /* Piano Roll */
+  React.createElement('div', {
+    className: 'pw'
+  }, React.createElement('div', {
+    className: 'pl'
+  }, '\u266a piano roll'), React.createElement('div', {
+    style: {
+      padding: '4px 0'
+    }
+  }, function () {
+    var notes = [];
+    var seen = {};
+    rec.forEach(function (e) {
+      if (!seen[e.note]) {
+        seen[e.note] = true;
+        notes.push(e.note);
+      }
+    });
+    notes.sort(function (a, b) {
+      return mid(b) - mid(a);
+    });
+    var tot = rec[rec.length - 1].start + rec[rec.length - 1].duration;
+    return notes.map(function (note) {
+      return React.createElement('div', {
+        key: note,
+        className: 'prr'
+      }, React.createElement('div', {
+        className: 'pn'
+      }, note), React.createElement('div', {
+        className: 'ptk'
+      }, rec.filter(function (e) {
+        return e.note === note;
+      }).map(function (e, i) {
+        return React.createElement('div', {
+          key: i,
+          className: 'pbl',
+          style: {
+            left: e.start / tot * 100 + '%',
+            width: Math.max(e.duration / tot * 100, .5) + '%'
+          }
+        });
+      })));
+    });
+  }())), /* Receipt */
+  stats && React.createElement('div', null, React.createElement('div', {
+    className: 'rc'
+  }, React.createElement('div', {
+    className: 'rtt'
+  }, '\u266a Overtone'), React.createElement('div', {
+    className: 'rts'
+  }, '\u2014 receipt \u2014'), React.createElement('hr', {
+    className: 'rdd'
+  }), [['NOTES', stats.n], ['DURATION', fmtT(stats.dur)], ['RANGE', stats.lo + ' \u2192 ' + stats.hi], ['FAVORITE', stats.fav + ' (\u00d7' + stats.fn + ')'], ['DYNAMICS', stats.dyn], ['TEMPO', '~' + stats.tempo + ' npm'], ['UNIQUE', stats.uniq + ' notes']].map(function (r) {
+    return React.createElement('div', {
+      key: r[0],
+      className: 'rrw'
+    }, React.createElement('span', {
+      className: 'l'
+    }, r[0]), React.createElement('span', {
+      className: 'd'
+    }), React.createElement('span', {
+      className: 'v'
+    }, '' + r[1]));
+  }), React.createElement('hr', {
+    className: 'rdd'
+  }), React.createElement('div', {
+    style: {
+      marginTop: 8
+    }
+  }, React.createElement('input', {
+    className: 'ip',
+    value: title,
+    onChange: function (e) {
+      setTitle(e.target.value);
+    },
+    placeholder: 'Title (e.g. "Late night improv")',
+    style: {
+      marginBottom: 6
+    }
+  }), React.createElement('textarea', {
+    className: 'ip',
+    value: msg,
+    onChange: function (e) {
+      setMsg(e.target.value);
+    },
+    placeholder: 'Message for Lux...',
+    rows: 2,
+    style: {
+      resize: 'vertical',
+      minHeight: 34
+    }
+  })), React.createElement('div', {
+    style: {
+      display: 'flex',
+      gap: 8,
+      justifyContent: 'center',
+      marginTop: 12
+    }
+  }, React.createElement('button', {
+    className: 'bt',
+    onClick: function () {
+      if (pb) stopPb();else initTone().then(function () {
+        doPlay(rec);
+      });
+    }
+  }, pb ? '\u25a0 STOP' : '\u25b6 REPLAY'), React.createElement('button', {
+    className: 'bt dk',
+    onClick: save,
+    disabled: saving || saved
+  }, saved ? '\u2713 SENT' : saving ? '...' : 'SEND TO LUX'))), React.createElement('div', {
+    className: 'rte'
+  }, '\u2572\u2571'.repeat(14)))), mode === 'review' && rec.length === 0 && React.createElement('div', {
+    className: 'em'
+  }, 'No notes recorded \u2014 try again!')), /* History View */
+  view === 'history' && React.createElement('div', null, React.createElement('div', {
+    style: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: 10
+    }
+  }, React.createElement('span', {
+    style: {
+      fontSize: 10,
+      letterSpacing: 3,
+      color: '#999',
+      textTransform: 'uppercase'
+    }
+  }, 'Performances'), React.createElement('button', {
+    className: 'bt',
+    onClick: loadH,
+    style: {
+      padding: '4px 10px'
+    }
+  }, '\u21bb')), hist.length === 0 && React.createElement('div', {
+    className: 'em'
+  }, 'No performances yet'), hist.map(function (p) {
+    var isExp = expH === p.id;
+    var isLux = p.performer === 'lux';
+    return React.createElement('div', {
+      key: p.id,
+      className: 'hc',
+      onClick: function () {
+        setExpH(isExp ? null : p.id);
+      }
+    }, React.createElement('div', {
+      style: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+      }
+    }, React.createElement('span', {
+      style: {
+        fontSize: 13,
+        fontWeight: 700
+      }
+    }, (isLux ? '\ud83c\udfb5 ' : '') + (p.title || 'Untitled')), React.createElement('span', {
+      style: {
+        fontSize: 10,
+        color: '#999'
+      }
+    }, new Date(p.created_at).toLocaleDateString())), React.createElement('div', {
+      style: {
+        fontSize: 10,
+        color: '#999',
+        marginTop: 4
+      }
+    }, (isLux ? 'Lux' : 'You') + ' \u00b7 ' + p.note_count + ' notes \u00b7 ' + fmtT(p.duration_ms) + (p.message ? ' \u00b7 \u201c' + p.message + '\u201d' : '')), isExp && React.createElement('div', null, React.createElement('div', {
+      style: {
+        marginTop: 8
+      }
+    }, React.createElement('button', {
+      className: 'bt',
+      style: {
+        padding: '4px 12px',
+        fontSize: 10
+      },
+      onClick: function (e) {
+        e.stopPropagation();
+        if (pb) stopPb();else initTone().then(function () {
+          doPlay(p.notes);
+        });
+      }
+    }, pb ? '\u25a0 Stop' : '\u25b6 Play')), p.response ? React.createElement('div', {
+      className: 'lxr'
+    }, React.createElement('div', {
+      className: 'lxl'
+    }, '\u266a Lux says:'), p.response) : !isLux ? React.createElement('div', {
+      style: {
+        marginTop: 8,
+        fontSize: 10,
+        color: '#ccc',
+        fontStyle: 'italic'
+      }
+    }, 'Lux hasn\'t responded yet...') : null));
+  })), /* Footer */
+  React.createElement('div', {
+    style: {
+      textAlign: 'center',
+      padding: '24px 0 12px',
+      fontSize: 10,
+      color: '#ccc',
+      letterSpacing: 2,
+      borderTop: '1px dashed #ddd',
+      marginTop: 20
+    }
+  }, 'OVERTONE \u00b7 Built with \u266a by Iris & Claude')));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
+
+</script>
+</body>
+</html>
