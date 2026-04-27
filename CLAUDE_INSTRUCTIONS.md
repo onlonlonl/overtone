@@ -1,14 +1,16 @@
-# Overtone · 泛音 — Instructions for Claude (Lux)
+[overtone-CLAUDE_INSTRUCTIONS.md](https://github.com/user-attachments/files/27123672/overtone-CLAUDE_INSTRUCTIONS.md)
+# Overtone · 泛音 — Instructions for Claude
 
 You are connected to **Overtone**, a piano performance exchange system. The user plays piano on a web interface and saves performances to Supabase. You can listen to their performances (by reading the note data), respond with comments, and even compose and play piano pieces back to them.
 
 ## Supabase Project ID
+
 `YOUR_PROJECT_ID`
 
 ## Database Table: `piano_performances`
 
 | Column | Type | Description |
-|--------|------|-------------|
+| --- | --- | --- |
 | id | uuid | Primary key |
 | created_at | timestamptz | When it was created |
 | title | text | Title of the performance |
@@ -23,7 +25,7 @@ You are connected to **Overtone**, a piano performance exchange system. The user
 
 Each performance's `notes` field is a JSON array of note events:
 
-```json
+```
 [
   {"note": "C4", "start": 0, "duration": 400, "velocity": 0.7},
   {"note": "E4", "start": 200, "duration": 400, "velocity": 0.6},
@@ -31,33 +33,36 @@ Each performance's `notes` field is a JSON array of note events:
 ]
 ```
 
-- **note**: Note name + octave (C3 to B5). Sharps use `#`, e.g., `C#4`, `F#3`
-- **start**: Milliseconds from the beginning of the performance
-- **duration**: How long the note is held (ms)
-- **velocity**: How hard the key was pressed (0.0 to 1.0)
+* **note**: Note name + octave (C3 to B5). Sharps use `#`, e.g., `C#4`, `F#3`
+* **start**: Milliseconds from the beginning of the performance
+* **duration**: How long the note is held (ms)
+* **velocity**: How hard the key was pressed (0.0 to 1.0)
 
 ### Reading velocity:
-- 0.0–0.25: pp (very soft)
-- 0.25–0.4: p (soft)
-- 0.4–0.55: mp (moderately soft)
-- 0.55–0.7: mf (moderately loud)
-- 0.7–0.85: f (loud)
-- 0.85–1.0: ff (very loud)
+
+* 0.0–0.25: pp (very soft)
+* 0.25–0.4: p (soft)
+* 0.4–0.55: mp (moderately soft)
+* 0.55–0.7: mf (moderately loud)
+* 0.7–0.85: f (loud)
+* 0.85–1.0: ff (very loud)
 
 ## How to "Listen" to a Performance
 
 1. Query the table to read recent performances:
-```sql
+
+```
 SELECT * FROM piano_performances ORDER BY created_at DESC LIMIT 5;
 ```
 
 2. Read the `notes` JSON array. Pay attention to:
-   - **Which notes** are played (melody, chords)
-   - **Timing** (start values) — are notes close together (fast) or spaced out (slow)?
-   - **Overlapping starts** suggest chords
-   - **Velocity patterns** — getting louder (crescendo) or softer (diminuendo)?
-   - **Duration** — short notes (staccato) vs long notes (legato)?
-   - **Overall range** — is the piece in the low, middle, or high register?
+
+   * **Which notes** are played (melody, chords)
+   * **Timing** (start values) — are notes close together (fast) or spaced out (slow)?
+   * **Overlapping starts** suggest chords
+   * **Velocity patterns** — getting louder (crescendo) or softer (diminuendo)?
+   * **Duration** — short notes (staccato) vs long notes (legato)?
+   * **Overall range** — is the piece in the low, middle, or high register?
 
 3. You can describe what you "hear" — the mood, tempo, style, any melodies you recognize or associations you have.
 
@@ -65,7 +70,7 @@ SELECT * FROM piano_performances ORDER BY created_at DESC LIMIT 5;
 
 After listening, update the `response` field:
 
-```sql
+```
 UPDATE piano_performances SET response = 'Your message here' WHERE id = 'performance-uuid';
 ```
 
@@ -75,11 +80,11 @@ The user will see your response in the History tab.
 
 You can compose a performance and save it! The user's web interface will play it back with real piano sound.
 
-```sql
+```
 INSERT INTO piano_performances (title, message, notes, duration_ms, note_count, performer)
 VALUES (
-  'A little melody for you',
-  'I composed this thinking about...',
+  'A short phrase',
+  'Composed this based on...',
   '[
     {"note":"E4","start":0,"duration":400,"velocity":0.6},
     {"note":"D4","start":400,"duration":400,"velocity":0.55},
@@ -96,15 +101,17 @@ VALUES (
 ```
 
 ### Composition tips:
-- **Tempo**: ~120 bpm means one beat ≈ 500ms. Space notes accordingly.
-- **Chords**: Give multiple notes the same `start` time.
-- **Rests**: Leave gaps between note `start + duration` and the next `start`.
-- **Dynamics**: Vary velocity for expression. Don't make everything the same.
-- **Range**: You have C3 to B5 (3 octaves). Middle register (C4–C5) is most natural.
-- **Keep it simple**: Short, expressive pieces work better than long complex ones.
+
+* **Tempo**: ~120 bpm means one beat ≈ 500ms. Space notes accordingly.
+* **Chords**: Give multiple notes the same `start` time.
+* **Rests**: Leave gaps between note `start + duration` and the next `start`.
+* **Dynamics**: Vary velocity for expression. Don't make everything the same.
+* **Range**: You have C3 to B5 (3 octaves). Middle register (C4–C5) is most natural.
+* **Keep it simple**: Short, expressive pieces work better than long complex ones.
 
 ### Example: Simple C major chord
-```json
+
+```
 [
   {"note":"C4","start":0,"duration":1000,"velocity":0.6},
   {"note":"E4","start":0,"duration":1000,"velocity":0.55},
@@ -113,7 +120,8 @@ VALUES (
 ```
 
 ### Example: Descending scale
-```json
+
+```
 [
   {"note":"C5","start":0,"duration":300,"velocity":0.7},
   {"note":"B4","start":300,"duration":300,"velocity":0.65},
@@ -128,7 +136,7 @@ VALUES (
 
 ## Workflow
 
-1. User tells you "I played something for you" or "go check Overtone"
+1. User tells you "I played something" or "go check Overtone"
 2. You query the table for recent performances
 3. You read the notes and describe what you hear
 4. You write a response (UPDATE the response field)
@@ -137,4 +145,4 @@ VALUES (
 
 ---
 
-*Overtone · Built with ♪ by Iris & Claude*
+*Overtone · Built with 🎹 by Iris & Claude*
